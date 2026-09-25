@@ -1,3 +1,5 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>비자 장기판</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -93,43 +95,75 @@ svg.li{width:1em;height:1em;fill:currentColor;vertical-align:-.14em;display:inli
 #toast{position:absolute;left:50%;bottom:10%;transform:translateX(-50%);background:rgba(23,17,12,.88);color:var(--paper);padding:6px 14px;border-radius:6px;font-size:13px;z-index:51;pointer-events:none;opacity:0;transition:opacity .25s;white-space:nowrap}
 #toast.show{opacity:1}
 
-/* ── dialogs ── */
-.overlay{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(10,7,4,.62);z-index:20;padding-inline:16px;padding-block:16px;overflow:auto}
-.dlg{background:linear-gradient(180deg,#261c14,#1d150f);border:1px solid var(--line);border-radius:10px;max-width:520px;width:100%;padding-block:22px;padding-inline:22px;box-shadow:0 20px 60px rgba(0,0,0,.6);display:flex;flex-direction:column;gap:16px;max-height:100%;overflow:auto}
+/* ── dialogs: 기기별 크기 토큰 ── */
+/* 기본 = 웹 브라우저(마우스) */
+.dlg{--fs:16px;--fs-s:13.5px;--fs-xs:12.5px;--hit:50px;--gap:18px;--pad:28px;--gl:54px;--h1:26px;--r:10px}
+/* 태블릿 = 터치 기기, 폭 641px 이상 */
+@media (pointer:coarse) and (min-width:641px){.dlg{--fs:19px;--fs-s:15.5px;--fs-xs:14px;--hit:64px;--gap:24px;--pad:34px;--gl:66px;--h1:31px;--r:12px}}
+/* 모바일 = 폭 640px 이하, 또는 가로로 눕힌 폰 */
+@media (max-width:640px),(pointer:coarse) and (max-height:520px){.dlg{--fs:17.5px;--fs-s:14.5px;--fs-xs:13px;--hit:58px;--gap:20px;--pad:20px;--gl:48px;--h1:24px;--r:10px}}
+
+.overlay{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(10,7,4,.7);z-index:20;padding-inline:16px;padding-block:16px;overflow:auto}
+.dlg{background:linear-gradient(180deg,#261c14,#1d150f);border:1px solid var(--line);border-radius:var(--r);width:100%;max-width:600px;padding-block:var(--pad);padding-inline:var(--pad);box-shadow:0 20px 60px rgba(0,0,0,.6);display:flex;flex-direction:column;gap:var(--gap);max-height:100%;overflow:auto;font-size:var(--fs)}
+.cols{display:grid;gap:var(--gap)}
+.col{display:flex;flex-direction:column;gap:var(--gap);min-width:0}
 .ttl{display:flex;align-items:center;gap:14px}
-.ttl .gl{font-size:46px;line-height:1}
+.ttl .gl{font-size:var(--gl);line-height:1}
 .ttl .gl.h{font-family:var(--kai);color:#e04a3c} .ttl .gl.c{color:#5f8fe0}
-.ttl h1{font-family:var(--disp);font-size:22px;margin:0;font-weight:700;text-wrap:balance}
-.ttl p{margin:2px 0 0;color:var(--muted);font-size:13px}
-.grp{display:flex;flex-direction:column;gap:7px}
-.lab{font-size:12px;letter-spacing:.08em;color:var(--muted)}
-.seg{display:grid;gap:6px;grid-template-columns:repeat(var(--n,2),1fr)}
-.seg button{background:var(--ink3);border:1px solid var(--line);border-radius:6px;padding:9px 6px;font-size:14px;display:flex;flex-direction:column;align-items:center;gap:1px;line-height:1.25}
-.seg button small{font-size:11px;color:var(--muted)}
-.seg button[aria-pressed="true"]{background:var(--gold);color:var(--gold-ink);border-color:var(--gold)}
-.seg button[aria-pressed="true"] small{color:#5a3f1c}
-.seg .h{font-family:var(--kai);color:#e2584a;font-size:17px} .seg .c{color:#6b98e6;font-size:17px}
+.ttl h1{font-family:var(--disp);font-size:var(--h1);margin:0;font-weight:700;text-wrap:balance}
+.ttl p{margin:4px 0 0;color:var(--muted);font-size:var(--fs-s)}
+.grp{display:flex;flex-direction:column;gap:8px}
+.lab{font-size:var(--fs-s);letter-spacing:.06em;color:var(--muted)}
+.seg{display:grid;gap:8px;grid-template-columns:repeat(var(--n,2),minmax(0,1fr))}
+.seg.lv{--n:3}
+.seg button{min-height:var(--hit);background:var(--ink3);border:1.5px solid var(--line);border-radius:8px;padding:8px 6px;font-size:var(--fs);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;line-height:1.25;transition:border-color .15s,background .15s}
+.seg button small{font-size:var(--fs-xs);color:var(--muted)}
+.seg button[aria-pressed="true"]{background:var(--gold);color:var(--gold-ink);border-color:var(--gold);font-weight:700}
+.seg button[aria-pressed="true"] small{color:#4f3614;font-weight:400}
+.seg .h{font-family:var(--kai);color:#e2584a;font-size:1.35em} .seg .c{color:#6b98e6;font-size:1.35em}
 .seg button[aria-pressed="true"] .h{color:var(--han-ink)} .seg button[aria-pressed="true"] .c{color:var(--cho-ink)}
-@media (max-width:460px){.seg.lv{--n:3!important}}
-.desc{font-size:13px;color:var(--paper);background:var(--ink2);border-radius:6px;padding:9px 11px;line-height:1.55}
-.desc b{color:var(--gold);font-weight:400}
+.desc{font-size:var(--fs-s);color:var(--paper);background:var(--ink2);border-radius:8px;padding:12px 14px;line-height:1.6}
+.desc b{color:var(--gold);font-weight:700}
 .row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-select{width:100%;background:var(--ink3);color:var(--paper);border:1px solid var(--line);border-radius:6px;padding:8px;font:inherit;font-size:14px}
-details{font-size:13px;color:var(--muted)}
-summary{cursor:pointer;color:var(--paper)}
-.tw{overflow-x:auto;margin-top:8px}
-table{border-collapse:collapse;width:100%;font-size:12px;font-variant-numeric:tabular-nums}
-th,td{padding:5px 6px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}
+.row2 label{display:flex;flex-direction:column;gap:6px}
+select{width:100%;min-height:var(--hit);background:var(--ink3);color:var(--paper);border:1.5px solid var(--line);border-radius:8px;padding:0 10px;font:inherit;font-size:var(--fs)}
+details{font-size:var(--fs-s);color:var(--muted)}
+summary{cursor:pointer;color:var(--paper);min-height:40px;display:flex;align-items:center}
+.tw{overflow-x:auto;margin-top:6px}
+table{border-collapse:collapse;width:100%;font-size:var(--fs-xs);font-variant-numeric:tabular-nums}
+th,td{padding:7px 8px;border-bottom:1px solid var(--line);text-align:left;white-space:nowrap}
 th{color:var(--muted);font-weight:400}
 td:first-child{color:var(--paper)}
-.note{font-size:12px;line-height:1.55;margin:8px 0 0}
-.go{display:flex;gap:8px}
-.primary{flex:1;background:var(--gold);color:var(--gold-ink);border:none;border-radius:7px;padding:12px;font-size:16px;font-family:var(--disp);font-weight:700}
-.secondary{background:transparent;border:1px solid var(--line);border-radius:7px;padding:12px 16px;font-size:14px}
-.res{font-family:var(--disp);font-size:26px;font-weight:700;margin:0}
+.note{font-size:var(--fs-xs);line-height:1.6;margin:8px 0 0}
+.go{display:flex;gap:10px}
+.primary{flex:1;min-height:calc(var(--hit) + 4px);background:var(--gold);color:var(--gold-ink);border:none;border-radius:9px;padding:0 16px;font-size:calc(var(--fs) * 1.15);font-family:var(--disp);font-weight:700}
+.secondary{min-height:calc(var(--hit) + 4px);background:transparent;border:1.5px solid var(--line);border-radius:9px;padding:0 18px;font-size:var(--fs)}
+.res{font-family:var(--disp);font-size:calc(var(--h1) * 1.15);font-weight:700;margin:0}
 .res .h{font-family:var(--kai);color:#e04a3c} .res .c{color:#5f8fe0}
+.credit{font-size:var(--fs-xs);color:var(--muted);margin:0;line-height:1.5}
+
+#menu .cols.one{grid-template-columns:1fr!important}
+/* 웹 브라우저·가로 태블릿: 두 단 배치 */
+@media (min-width:900px) and (min-height:560px){
+  #menu .dlg{max-width:920px}
+  #menu .cols{grid-template-columns:1fr 1.15fr;align-items:start}
+  #menu .dlg:has(.cols.one){max-width:600px}
+}
+@media (hover:hover) and (pointer:fine){
+  .seg button:hover:not([aria-pressed="true"]){border-color:var(--gold)}
+  .primary:hover{filter:brightness(1.07)} .secondary:hover{border-color:var(--gold)}
+}
+/* 모바일: 화면 전체를 쓰는 설정 화면, 시작 버튼은 아래에 고정 */
+@media (max-width:640px),(pointer:coarse) and (max-height:520px){
+  #menu{padding:0;align-items:stretch;background:var(--ink)}
+  #menu .dlg{max-width:none;height:100%;max-height:none;border:none;border-radius:0;box-shadow:none;padding-bottom:0}
+  #menu .go{position:sticky;bottom:0;margin-top:auto;padding-block:12px calc(14px + env(safe-area-inset-bottom,0px));background:linear-gradient(180deg,rgba(29,21,15,0),#1d150f 28%)}
+  #over .dlg{max-width:440px}
+}
+@media (pointer:coarse) and (max-height:520px){
+  #menu .cols{grid-template-columns:1fr 1fr;align-items:start}
+}
 .nm .h{font-family:var(--kai);color:#e2584a} .nm .c{color:#6b98e6}
-.credit{font-size:11px;color:var(--muted);margin:0;line-height:1.5}
 @media (prefers-reduced-motion:reduce){.pc{transition:none}#banner.show{animation-duration:.01s}}
 </style>
 
@@ -152,6 +186,7 @@ td:first-child{color:var(--paper)}
   <div class="dlg" role="dialog" aria-labelledby="mt">
     <div class="ttl"><span class="gl h">漢</span><span class="gl c" data-li="楚"></span>
       <div><h1 id="mt">비자 장기판</h1><p>한국 장기 · 초가 먼저 두고, 한은 덤 1.5점</p></div></div>
+    <div class="cols"><div class="col">
     <div class="grp"><span class="lab">대국 방식</span>
       <div class="seg" id="segMode">
         <button id="m-ai" data-v="ai">1인 대국<small>AI와 두기</small></button>
@@ -162,18 +197,20 @@ td:first-child{color:var(--paper)}
         <button id="s-han" data-v="1"><span class="h">漢</span>한 · 빨강<small>후수</small></button>
         <button id="s-cho" data-v="-1"><span class="c" data-li="楚"></span>초 · 파랑<small>선수</small></button>
       </div></div>
-    <div class="grp" id="gLv"><span class="lab">난이도</span>
-      <div class="seg lv" id="segLv" style="--n:6"></div>
-      <div class="desc" id="lvDesc"></div>
-      <details><summary>난이도 설계 보기</summary>
-        <div class="tw"><table id="lvTable"></table></div>
-        <p class="note">목표 기력은 탐색 깊이, 생각 시간, 평가 항목, 실수 확률을 단계별로 조절해 맞춘 설계값입니다. 실제 사람과의 대국으로 측정한 기력은 아니며, 기기 성능에 따라 같은 시간 안에 읽는 깊이가 달라질 수 있습니다.</p>
-      </details></div>
     <div class="grp"><span class="lab">상차림 (각 진영 왼쪽부터)</span>
       <div class="row2">
         <label><span class="lab">漢 한</span><select id="setHan"></select></label>
         <label><span class="lab"><span data-li="楚"></span> 초</span><select id="setCho"></select></label>
       </div></div>
+    </div><div class="col">
+    <div class="grp" id="gLv"><span class="lab">난이도</span>
+      <div class="seg lv" id="segLv"></div>
+      <div class="desc" id="lvDesc"></div>
+      <details><summary>난이도 설계 보기</summary>
+        <div class="tw"><table id="lvTable"></table></div>
+        <p class="note">목표 기력은 탐색 깊이, 생각 시간, 평가 항목, 실수 확률을 단계별로 조절해 맞춘 설계값입니다. 실제 사람과의 대국으로 측정한 기력은 아니며, 기기 성능에 따라 같은 시간 안에 읽는 깊이가 달라질 수 있습니다.</p>
+      </details></div>
+    </div></div>
     <p class="credit">漢 해서체: LXGW WenKai TC · 楚 예서체: 중화민국 교육부 예서(教育部隸書), CC BY-ND 3.0 TW</p>
     <div class="go"><button class="secondary" id="bResume" hidden>이어 두기</button><button class="primary" id="bStart">대국 시작</button></div>
   </div>
@@ -652,6 +689,7 @@ function refreshMenu(){
   seg('segSide',S.human,v=>S.human=+v);
   seg('segLv',S.lvl,v=>S.lvl=+v);
   $('#gSide').hidden=$('#gLv').hidden=S.mode!=='ai';
+  $('#menu .cols').classList.toggle('one',S.mode!=='ai');
   const L=LEVELS[S.lvl];
   $('#lvDesc').innerHTML=`<b>${L.name} · 목표 ${L.rank}</b><br>${L.desc}`;
 }
